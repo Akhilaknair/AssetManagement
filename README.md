@@ -7,14 +7,14 @@
 i) The system provides user registration and login functionality.  
 ii) Authenticated users can securely log out of the system.  
 iii) Users can view and manage their profile information.  
-iv) Users are allowed to delete their own accounts.  
+iv) Users are not allowed to delete their own accounts.  
 v) Role-based access control is implemented with three roles: Admin, Asset Manager, and Employee.
 
 
 ## 2. User Management
 
 i) Admins and Asset Managers can view the list of all registered users.  
-ii) Admins and Asset Managers can update and manage user roles.
+ii) Admins and Asset Managers can update and manage user roles and delete a targeted user account.
 
 
 ## 3. Asset Management
@@ -53,7 +53,6 @@ iii) `POST /auth/logout`  -> Used to log out the currently authenticated user.
 
 iv) `GET /auth/profile`  -> Used to fetch the logged-in user’s profile details.
 
-v) `DELETE /auth/delete`  ->Used to delete the logged-in user account.
 
 
 ### User Management Routes (`/users`)->(Requires authentication and Admin, Asset Manager role)
@@ -62,6 +61,7 @@ i) `GET /users/`  -> Used to fetch all users.
 
 ii) `PUT /users/{id}/role`  -> Used to update the role of a specific user.
 
+v) `DELETE /users/{id}`  ->Used to delete a targeted user account.
 
 ### Asset Routes (`/assets`)-> (Requires authentication)
 
