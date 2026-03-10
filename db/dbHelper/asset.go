@@ -292,22 +292,22 @@ func GetAllAssetsForDashboard() ([]models.AssetList, error) {
 	return assets, err
 }
 
-func GetAssetsDashboard() (*models.GetAllAssetsResponse, error) {
-	summary, err := GetAssetSummary()
-	if err != nil {
-		return nil, err
-	}
-
-	assets, err := GetAllAssetsForDashboard()
-	if err != nil {
-		return nil, err
-	}
-
-	return &models.GetAllAssetsResponse{
-		Summary: summary,
-		Assets:  assets,
-	}, nil
-}
+//func GetAssetsDashboard() (*models.GetAllAssetsResponse, error) {
+//	summary, err := GetAssetSummary()
+//	if err != nil {
+//		return nil, err
+//	}
+//
+//	assets, err := GetAllAssetsForDashboard()
+//	if err != nil {
+//		return nil, err
+//	}
+//
+//	return &models.GetAllAssetsResponse{
+//		Summary: summary,
+//		Assets:  assets,
+//	}, nil
+//}
 
 func UpdateLaptop(tx *sqlx.Tx, assetID string, req *models.LaptopRequest) error {
 
@@ -335,8 +335,7 @@ func UpdateLaptop(tx *sqlx.Tx, assetID string, req *models.LaptopRequest) error 
 
 func UpdateKeyboard(tx *sqlx.Tx, assetID string, req *models.KeyboardRequest) error {
 
-	query := `
-		update keyboard
+	query := `update keyboard
 		set layout = $2,connectivity = $3
 		where asset_id = $1`
 
@@ -346,7 +345,6 @@ func UpdateKeyboard(tx *sqlx.Tx, assetID string, req *models.KeyboardRequest) er
 		req.Layout,
 		req.Connectivity,
 	)
-
 	return err
 }
 
@@ -382,20 +380,18 @@ func UpdateMobile(tx *sqlx.Tx, assetID string, req *models.MobileRequest) error 
 		req.Charger,
 		req.Password,
 	)
-
 	return err
 }
 
 func SentToServiceTx(tx *sqlx.Tx, assetID string, serviceStart, serviceEnd time.Time, userID string) error {
-
+	//asset table update
 	updateQuery := `
 		update assets
 		set status = 'in_service',
 		    updated_at = now()
 		where id = $1
 		  and archived_at is null
-		  and status = 'available'
-	`
+		  and status = 'available'`
 
 	res, err := tx.Exec(updateQuery, assetID)
 	if err != nil {
@@ -411,6 +407,7 @@ func SentToServiceTx(tx *sqlx.Tx, assetID string, serviceStart, serviceEnd time.
 		return errors.New("asset not available ")
 	}
 
+	//asset history table updation
 	insertQuery := `
 		insert into asset_history (
 			asset_id,
@@ -435,6 +432,7 @@ func SentToServiceTx(tx *sqlx.Tx, assetID string, serviceStart, serviceEnd time.
 }
 
 func GetAssetsWithFilters(status, assetType, brand, owner string) ([]models.AssetList, error) {
+
 	query := `select a.id , a.brand , a.model ,a.asset_type,
                     a.serial_no,a.status ,u.name as assigned_to ,
                    a.owner as owned_by
@@ -449,6 +447,5 @@ func GetAssetsWithFilters(status, assetType, brand, owner string) ([]models.Asse
 
 	assets := make([]models.AssetList, 0)
 	err := db.Assets.Select(&assets, query, status, assetType, brand, owner)
-
 	return assets, err
 }

@@ -80,3 +80,7 @@ func main() {
 		fmt.Println(err)
 	}
 }
+
+// change empid-> user_id
+// specs of device to show i
+// include - exclude toggle button
